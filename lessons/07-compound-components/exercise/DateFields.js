@@ -1,6 +1,8 @@
-import React, { Fragment, useContext, createContext } from "react"
+import React, { useContext, createContext } from "react"
 
 import { daysInMonth } from "app/utils"
+
+const DateContext = createContext()
 
 export default function DateFields({
   children,
@@ -11,17 +13,12 @@ export default function DateFields({
   onChange
 }) {
   const date = controlledValue || defaultValue
-  return (
-    <Fragment>
-      <MonthField date={date} onChange={onChange} />/
-      <DayField date={date} onChange={onChange} />/
-      <YearField date={date} onChange={onChange} start={start} end={end} />
-    </Fragment>
-  )
+  const context = { onChange, date, start, end }
+  return <DateContext.Provider value={context} children={children} />
 }
 
 export function DayField(props) {
-  const { date, onChange } = props
+  const { date, onChange } = useContext(DateContext)
   const month = date.getMonth()
   const year = date.getFullYear()
   const days = Array.from({ length: daysInMonth(month, year) })
@@ -33,7 +30,7 @@ export function DayField(props) {
   }
 
   return (
-    <select value={value} onChange={handleChange}>
+    <select value={value} onChange={handleChange} {...props}>
       {days.map((_, index) => (
         <option key={index} value={index + 1}>
           {index < 9 ? "0" : ""}
@@ -45,7 +42,7 @@ export function DayField(props) {
 }
 
 export function MonthField(props) {
-  const { date, onChange } = props
+  const { date, onChange } = useContext(DateContext)
   const month = date.getMonth()
   const handleChange = event => {
     const newDate = new Date(date.getTime())
@@ -54,7 +51,7 @@ export function MonthField(props) {
   }
 
   return (
-    <select value={month} onChange={handleChange}>
+    <select value={month} onChange={handleChange} {...props}>
       <option value="0">01</option>
       <option value="1">02</option>
       <option value="2">03</option>
@@ -71,8 +68,8 @@ export function MonthField(props) {
   )
 }
 
-export function YearField(props) {
-  const { date, onChange, start, end } = props
+export function YearField(start, end, ...rest) {
+  const { date, onChange } = useContext(DateContext)
   const difference = end - start + 1
   const years = Array.from({ length: difference }).map(
     (_, index) => index + start
@@ -84,7 +81,7 @@ export function YearField(props) {
   }
 
   return (
-    <select value={date.getFullYear()} onChange={handleChange}>
+    <select value={date.getFullYear()} onChange={handleChange} {...rest}>
       {years.map(year => (
         <option key={year}>{year}</option>
       ))}

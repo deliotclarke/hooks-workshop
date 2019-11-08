@@ -69,7 +69,6 @@ import { subscribeToPosts, fetchPosts } from "app/utils"
 //
 // [open TopBar.js]
 
-
 const cache = {}
 
 export default function usePosts(uid) {
