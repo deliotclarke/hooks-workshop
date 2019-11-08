@@ -4,6 +4,8 @@ import "./styles.css"
 import React from "react"
 import ReactDOM from "react-dom"
 
+import { FaPlus } from "react-icons"
+
 /**********************************************************/
 // We like React because:
 //
@@ -91,12 +93,11 @@ import ReactDOM from "react-dom"
 // const getTitle = () => "Add"
 // const reactElement = (
 //   <button className="icon_button cta">
-//     +
-//     <span style={{ fontWeight: "bold", marginLeft: "5px" }}>{getTitle()}</span>
+//     +<span style={{ fontWeight: "bold", marginLeft: "5px" }}>{getTitle()}</span>
 //   </button>
 // )
 
-// const domElement = document.getElementById("root")
+// const domElement = document.getElementById("#root")
 // ReactDOM.render(reactElement, domElement)
 
 /**********************************************************/
@@ -117,7 +118,7 @@ import ReactDOM from "react-dom"
 /**********************************************************/
 // Let's turn our button into a component and remove some stuff
 
-// const Button = () => (
+// ! const Button = () || console.log('random console log that is tight') => (
 //   <button className="icon_button">
 //     <FaPlus />
 //     <span>Add</span>

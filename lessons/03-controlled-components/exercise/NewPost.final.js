@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { useAppState } from "app/app-state"
 import Avatar from "app/Avatar"
 import Minutes from "app/Minutes"
@@ -13,10 +13,18 @@ export default function NewPost({ takeFocus, date, onSuccess, showAvatar }) {
   const [{ auth }] = useAppState()
   const [message, setMessage] = useState("Ran around the lake.")
   const messageTooLong = message.length > MAX_MESSAGE_LENGTH
+  const countRef = useRef(null)
 
   const handleMessageChange = event => {
-    setMessage(event.target.value)
+    let message = event.target.value
+    setMessage(message)
+
+    countRef.current.textContent = message.length
   }
+
+  useEffect(() => {
+    countRef.current.textContent = message.length
+  }, [message])
 
   return (
     <div className={"NewPost" + (messageTooLong ? ` ${errorClass}` : "")}>
@@ -29,7 +37,7 @@ export default function NewPost({ takeFocus, date, onSuccess, showAvatar }) {
           onChange={handleMessageChange}
         />
         <div className="NewPost_char_count">
-          {message.length}/{MAX_MESSAGE_LENGTH}
+          {countRef}/{MAX_MESSAGE_LENGTH}
         </div>
         <RecentPostsDropdown
           uid={auth.uid}
